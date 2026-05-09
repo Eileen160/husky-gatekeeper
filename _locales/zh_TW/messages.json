@@ -1,0 +1,81 @@
+{
+  "appName": {
+    "message": "Husky Gatekeeper"
+  },
+  "appDescription": {
+    "message": "在分心網站待太久時，讓哈士奇出現擋住頁面，陪你休息一下。"
+  },
+  "usageLimitLabel": {
+    "message": "幾分鐘後哈士奇出現"
+  },
+  "breakTimeLabel": {
+    "message": "哈士奇休息時間（分鐘）"
+  },
+  "huskyEnabledLabel": {
+    "message": "啟用 Husky Gatekeeper"
+  },
+  "activeLabel": {
+    "message": "啟用"
+  },
+  "activeStatus": {
+    "message": "啟用中 - 正在守護你的時間"
+  },
+  "inactiveStatus": {
+    "message": "未啟用"
+  },
+  "limitShortLabel": {
+    "message": "Limit"
+  },
+  "breakShortLabel": {
+    "message": "Break"
+  },
+  "targetSitesLabel": {
+    "message": "監看網站"
+  },
+  "customDomainsHint": {
+    "message": "一行一個網域，子網域會自動包含。"
+  },
+  "dismissButton": {
+    "message": "請哈士奇讓開"
+  },
+  "leaveButton": {
+    "message": "讓哈士奇離開"
+  },
+  "blockAllLabel": {
+    "message": "Block every site"
+  },
+  "blockAllHint": {
+    "message": "嚴格模式 - 套用到所有網站與分頁"
+  },
+  "statusChecking": {
+    "message": "正在檢查目前分頁..."
+  },
+  "statusTracked": {
+    "message": "正在追蹤目前分頁：$DOMAIN$",
+    "placeholders": {
+      "domain": {
+        "content": "$1"
+      }
+    }
+  },
+  "statusNotTracked": {
+    "message": "目前分頁不在監看清單：$DOMAIN$",
+    "placeholders": {
+      "domain": {
+        "content": "$1"
+      }
+    }
+  },
+  "statusNotInjected": {
+    "message": "尚未在此分頁啟用。更新外掛後，請重新整理網頁。"
+  },
+  "saveButton": {
+    "message": "儲存"
+  },
+  "resetButton": {
+    "message": "Reset to defaults"
+  },
+  "savedMessage": {
+    "message": "已儲存"
+  }
+}

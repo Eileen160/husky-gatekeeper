@@ -1,0 +1,385 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      background: #071522;
+      color: #ecf8ff;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      margin: 0;
+      padding: 15px;
+      width: 380px;
+    }
+
+    h1 {
+      align-items: center;
+      display: flex;
+      font-size: 17px;
+      gap: 9px;
+      margin: 0 0 15px;
+    }
+
+    .top-row {
+      align-items: center;
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 12px;
+    }
+
+    .subtitle {
+      color: #9accea;
+      font-size: 13px;
+      font-weight: 650;
+      margin-top: -8px;
+    }
+
+    h1 img {
+      height: 28px;
+      width: 28px;
+    }
+
+    .section {
+      margin-bottom: 14px;
+    }
+
+    label,
+    .label {
+      color: #a8bac8;
+      display: block;
+      font-size: 12px;
+      font-weight: 650;
+      margin-bottom: 6px;
+    }
+
+    input[type="number"],
+    textarea {
+      background: #0f2233;
+      border: 1px solid #254962;
+      border-radius: 8px;
+      color: #f6fbff;
+      font: inherit;
+      outline: none;
+      padding: 9px 10px;
+      width: 100%;
+    }
+
+    input[type="number"]::-webkit-inner-spin-button,
+    input[type="number"]::-webkit-outer-spin-button {
+      -webkit-appearance: none;
+      margin: 0;
+    }
+
+    input[type="number"] {
+      appearance: textfield;
+      -moz-appearance: textfield;
+    }
+
+    textarea {
+      line-height: 1.45;
+      min-height: 88px;
+      resize: vertical;
+    }
+
+    input[type="number"]:focus,
+    textarea:focus {
+      border-color: #75d7ff;
+      box-shadow: 0 0 0 3px rgba(117, 215, 255, 0.16);
+    }
+
+    .toggle-row {
+      align-items: center;
+      color: #f4eee7;
+      cursor: pointer;
+      display: flex;
+      font-size: 13px;
+      gap: 8px;
+      line-height: 1.35;
+      margin-bottom: 0;
+    }
+
+    .toggle-row input {
+      position: absolute;
+      opacity: 0;
+    }
+
+    .switch {
+      background: #24384a;
+      border: 1px solid #38627a;
+      border-radius: 999px;
+      display: inline-block;
+      height: 28px;
+      position: relative;
+      width: 52px;
+    }
+
+    .switch::after {
+      background: #d9f5ff;
+      border-radius: 50%;
+      content: "";
+      height: 22px;
+      left: 3px;
+      position: absolute;
+      top: 2px;
+      transition: transform 0.16s ease;
+      width: 22px;
+    }
+
+    .toggle-row input:checked + .switch,
+    .block-all input:checked + .switch {
+      background: #5ed7ff;
+      border-color: #9ae8ff;
+    }
+
+    .toggle-row input:checked + .switch::after,
+    .block-all input:checked + .switch::after {
+      background: #071522;
+      transform: translateX(23px);
+    }
+
+    .hint {
+      color: #8294a2;
+      font-size: 11px;
+      line-height: 1.4;
+      margin: 6px 0 0;
+    }
+
+    button {
+      background: #bcecff;
+      border: 0;
+      border-radius: 8px;
+      color: #07131d;
+      cursor: pointer;
+      font-size: 14px;
+      font-weight: 750;
+      padding: 10px 12px;
+      width: 100%;
+    }
+
+    button:hover {
+      background: #e2f7ff;
+    }
+
+    button:disabled,
+    input:disabled {
+      cursor: not-allowed;
+    }
+
+    body.is-inactive .panel,
+    body.is-inactive .section,
+    body.is-inactive .block-all,
+    body.is-inactive #saveBtn,
+    body.is-inactive #resetBtn,
+    body.is-inactive .status {
+      opacity: 0.48;
+    }
+
+    body.is-inactive .toggle-row {
+      opacity: 1;
+    }
+
+    input[type="number"]:disabled {
+      background: #0b1b2a;
+      border-color: #183348;
+      color: #7893a5;
+    }
+
+    #saveBtn:disabled {
+      background: #2a4050;
+      color: #7893a5;
+      cursor: not-allowed;
+    }
+
+    .status {
+      background: #0f2233;
+      border: 1px solid #254962;
+      border-radius: 8px;
+      color: #a8bac8;
+      font-size: 11px;
+      line-height: 1.45;
+      margin: 0 0 12px;
+      padding: 9px 10px;
+    }
+
+    .panel {
+      border: 1px solid #254962;
+      border-radius: 14px;
+      margin-bottom: 12px;
+      overflow: hidden;
+    }
+
+    .field-row {
+      align-items: center;
+      display: grid;
+      grid-template-columns: 1fr 92px 38px;
+      gap: 10px;
+      padding: 14px 16px;
+    }
+
+    .field-row + .field-row {
+      border-top: 1px solid #1d374d;
+    }
+
+    .field-row label {
+      color: #f4eee7;
+      font-size: 15px;
+      margin: 0;
+    }
+
+    .field-row input {
+      text-align: center;
+    }
+
+    .unit {
+      color: #9accea;
+      font-size: 13px;
+    }
+
+    .chips {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .chip {
+      align-items: center;
+      border: 1px solid #2f6f91;
+      border-radius: 999px;
+      color: #a8ddf3;
+      display: flex;
+      font-size: 13px;
+      font-weight: 750;
+      gap: 7px;
+      padding: 8px 11px;
+    }
+
+    .chip input {
+      accent-color: #5ed7ff;
+      height: 15px;
+      margin: 0;
+      width: 15px;
+    }
+
+    .chip.is-disabled {
+      border-color: #1f3b50;
+      color: #637d8f;
+      cursor: not-allowed;
+      opacity: 0.48;
+    }
+
+    .chip.is-disabled input {
+      cursor: not-allowed;
+    }
+
+    .block-all {
+      align-items: center;
+      border: 1px solid #254962;
+      border-radius: 14px;
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 12px;
+      padding: 13px 16px;
+      position: relative;
+    }
+
+    .block-all > input {
+      opacity: 0;
+      position: absolute;
+      right: 18px;
+    }
+
+    .block-all strong {
+      display: block;
+      font-size: 15px;
+      margin-bottom: 4px;
+    }
+
+    .block-all span {
+      color: #9accea;
+      font-size: 12px;
+      line-height: 1.35;
+    }
+
+    .secondary-action {
+      background: transparent;
+      color: #9accea;
+      font-size: 12px;
+      margin-top: 8px;
+      padding: 6px 8px;
+      text-align: center;
+    }
+
+    .secondary-action:hover {
+      background: transparent;
+      color: #e2f7ff;
+      text-decoration: underline;
+    }
+
+    .secondary-action:disabled {
+      color: #637d8f;
+      cursor: not-allowed;
+      text-decoration: none;
+    }
+  </style>
+</head>
+<body>
+  <div class="top-row">
+    <h1>
+      <img src="assets/icon-48.png" alt="">
+      <span data-i18n="appName"></span>
+    </h1>
+    <label class="toggle-row">
+      <input type="checkbox" id="huskyEnabled">
+      <span class="switch"></span>
+      <span data-i18n="activeLabel"></span>
+    </label>
+  </div>
+  <div class="subtitle" id="activeStatus"></div>
+
+  <div class="panel">
+    <div class="field-row">
+      <label for="usageLimit" data-i18n="limitShortLabel"></label>
+      <input type="number" id="usageLimit" min="1" max="480" value="30">
+      <span class="unit">min</span>
+    </div>
+    <div class="field-row">
+      <label for="breakTime" data-i18n="breakShortLabel"></label>
+      <input type="number" id="breakTime" min="1" max="60" value="5">
+      <span class="unit">min</span>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="label" data-i18n="targetSitesLabel"></div>
+    <div class="chips">
+      <label class="chip"><input type="checkbox" data-domain="x.com">X</label>
+      <label class="chip"><input type="checkbox" data-domain="youtube.com">YouTube</label>
+      <label class="chip"><input type="checkbox" data-domain="facebook.com">Facebook</label>
+      <label class="chip"><input type="checkbox" data-domain="reddit.com">Reddit</label>
+      <label class="chip"><input type="checkbox" data-domain="threads.com">Threads</label>
+      <label class="chip"><input type="checkbox" data-domain="instagram.com">Instagram</label>
+      <label class="chip"><input type="checkbox" data-domain="tiktok.com">TikTok</label>
+    </div>
+  </div>
+
+  <label class="block-all">
+    <span>
+      <strong data-i18n="blockAllLabel"></strong>
+      <span data-i18n="blockAllHint"></span>
+    </span>
+    <input type="checkbox" id="blockAll">
+    <span class="switch"></span>
+  </label>
+
+  <div class="status" id="statusMsg" data-i18n="statusChecking"></div>
+  <button id="saveBtn" data-i18n="saveButton"></button>
+  <button class="secondary-action" id="resetBtn" data-i18n="resetButton"></button>
+
+  <script src="shared.js"></script>
+  <script src="popup.js"></script>
+</body>
+</html>

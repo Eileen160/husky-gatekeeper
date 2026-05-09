@@ -1,0 +1,240 @@
+#husky-gatekeeper-overlay {
+  align-items: center !important;
+  background: rgba(178, 178, 172, 0.74) !important;
+  backdrop-filter: blur(6px) !important;
+  -webkit-backdrop-filter: blur(6px) !important;
+  color: #17222b !important;
+  display: flex !important;
+  flex-direction: column !important;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif !important;
+  inset: 0 !important;
+  justify-content: flex-end !important;
+  overflow: hidden !important;
+  position: fixed !important;
+  z-index: 2147483647 !important;
+}
+
+#husky-gatekeeper-countdown {
+  background: rgba(38, 32, 28, 0.95) !important;
+  border: 1px solid rgba(255, 255, 255, 0.12) !important;
+  border-radius: 14px !important;
+  box-shadow: 0 18px 44px rgba(15, 28, 38, 0.26) !important;
+  color: #f7fbff !important;
+  left: 7vw !important;
+  min-width: 210px !important;
+  padding: 18px 26px !important;
+  position: absolute !important;
+  text-align: left !important;
+  top: 12vh !important;
+}
+
+#husky-gatekeeper-countdown .husky-label {
+  color: #9fc6df !important;
+  font-size: 13px !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.08em !important;
+  margin: 0 0 7px !important;
+  text-transform: uppercase !important;
+}
+
+#husky-gatekeeper-countdown .husky-time {
+  color: #f7fbff !important;
+  font-size: 58px !important;
+  font-variant-numeric: tabular-nums !important;
+  font-weight: 750 !important;
+  letter-spacing: 0 !important;
+  line-height: 1 !important;
+  margin: 0 !important;
+}
+
+#husky-gatekeeper-leave {
+  background: rgba(188, 236, 255, 0.96) !important;
+  border: 1px solid rgba(255, 255, 255, 0.54) !important;
+  border-radius: 12px !important;
+  box-shadow: 0 16px 34px rgba(15, 28, 38, 0.28) !important;
+  color: #07131d !important;
+  cursor: pointer !important;
+  display: block !important;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif !important;
+  font-size: 14px !important;
+  font-weight: 800 !important;
+  letter-spacing: 0 !important;
+  margin: 14px 0 0 !important;
+  min-width: 0 !important;
+  padding: 11px 14px !important;
+  position: static !important;
+  transform: none !important;
+  width: 100% !important;
+  z-index: 2147483647 !important;
+}
+
+#husky-gatekeeper-leave:hover {
+  background: #f0f9ff !important;
+}
+
+#husky-gatekeeper-stage {
+  animation: none !important;
+  bottom: 0 !important;
+  height: 100vh !important;
+  left: 0 !important;
+  margin: 0 !important;
+  max-width: none !important;
+  pointer-events: none !important;
+  position: fixed !important;
+  transform: translateX(0) !important;
+  width: 100vw !important;
+  z-index: 2147483646 !important;
+}
+
+#husky-gatekeeper-stage.sleeping {
+  animation: husky-breathe 3.4s ease-in-out infinite !important;
+  transform: translateX(0) !important;
+}
+
+#husky-gatekeeper-stage .husky-real-video {
+  border-radius: 0 !important;
+  box-shadow: none !important;
+  display: block !important;
+  height: 100% !important;
+  margin: 0 auto !important;
+  max-width: none !important;
+  object-fit: contain !important;
+  transform: scale(1.32) translateY(5vh) !important;
+  width: 100vw !important;
+}
+
+#husky-gatekeeper-stage .husky-sleep-video,
+#husky-gatekeeper-stage.use-fallback .husky-real-video {
+  display: none !important;
+}
+
+#husky-gatekeeper-stage.sleeping .husky-enter-video {
+  display: none !important;
+}
+
+#husky-gatekeeper-stage.sleeping .husky-sleep-video {
+  display: block !important;
+}
+
+#husky-gatekeeper-stage.use-fallback .husky-real-video,
+#husky-gatekeeper-stage.use-fallback.sleeping .husky-sleep-video,
+#husky-gatekeeper-stage.use-fallback.sleeping .husky-enter-video {
+  display: none !important;
+}
+
+#husky-gatekeeper-stage.use-fallback {
+  animation: husky-breathe 3.4s ease-in-out infinite !important;
+  transform: translateX(0) !important;
+}
+
+#husky-gatekeeper-stage #husky-gatekeeper-scene {
+  display: none !important;
+}
+
+#husky-gatekeeper-stage.use-fallback #husky-gatekeeper-scene {
+  display: block !important;
+}
+
+#husky-gatekeeper-scene {
+  height: 100% !important;
+  width: 100% !important;
+}
+
+#husky-gatekeeper-scene svg {
+  display: block !important;
+  height: 100% !important;
+  overflow: visible !important;
+  width: 100% !important;
+}
+
+#husky-gatekeeper-scene .tail {
+  animation: husky-tail 0.7s ease-in-out infinite alternate !important;
+  transform-box: fill-box !important;
+  transform-origin: 18% 80% !important;
+}
+
+#husky-gatekeeper-scene .ear-left,
+#husky-gatekeeper-scene .ear-right {
+  animation: husky-ear 3.8s ease-in-out infinite !important;
+  transform-box: fill-box !important;
+  transform-origin: 50% 95% !important;
+}
+
+#husky-gatekeeper-scene .paw-left,
+#husky-gatekeeper-scene .paw-right {
+  animation: husky-paw 1.6s ease-in-out infinite alternate !important;
+  transform-box: fill-box !important;
+}
+
+#husky-gatekeeper-scene .eye-open {
+  opacity: 1 !important;
+}
+
+#husky-gatekeeper-scene .eye-sleep {
+  opacity: 0 !important;
+}
+
+#husky-gatekeeper-scene.sleeping .tail,
+#husky-gatekeeper-scene.sleeping .ear-left,
+#husky-gatekeeper-scene.sleeping .ear-right,
+#husky-gatekeeper-scene.sleeping .paw-left,
+#husky-gatekeeper-scene.sleeping .paw-right {
+  animation-play-state: paused !important;
+}
+
+#husky-gatekeeper-scene.sleeping .eye-open {
+  opacity: 0 !important;
+}
+
+#husky-gatekeeper-scene.sleeping .eye-sleep {
+  opacity: 1 !important;
+}
+
+#husky-gatekeeper-snow {
+  inset: 0 !important;
+  pointer-events: none !important;
+  position: absolute !important;
+}
+
+#husky-gatekeeper-snow span {
+  animation: husky-snow 8s linear infinite !important;
+  background: rgba(255, 255, 255, 0.82) !important;
+  border-radius: 50% !important;
+  height: 7px !important;
+  left: var(--x) !important;
+  opacity: var(--o) !important;
+  position: absolute !important;
+  top: -12px !important;
+  width: 7px !important;
+}
+
+@keyframes husky-slide-in {
+  from { transform: translateX(110vw); }
+  to { transform: translateX(0); }
+}
+
+@keyframes husky-breathe {
+  0%, 100% { transform: translateX(0) translateY(0) scale(1); }
+  50% { transform: translateX(0) translateY(8px) scale(1.01); }
+}
+
+@keyframes husky-tail {
+  from { transform: rotate(-6deg); }
+  to { transform: rotate(13deg); }
+}
+
+@keyframes husky-ear {
+  0%, 86%, 100% { transform: rotate(0deg); }
+  90% { transform: rotate(-5deg); }
+  94% { transform: rotate(4deg); }
+}
+
+@keyframes husky-paw {
+  from { transform: translateY(0); }
+  to { transform: translateY(-8px); }
+}
+
+@keyframes husky-snow {
+  from { transform: translate3d(0, -20px, 0); }
+  to { transform: translate3d(24px, 110vh, 0); }
+}

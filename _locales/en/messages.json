@@ -1,0 +1,81 @@
+{
+  "appName": {
+    "message": "Husky Gatekeeper"
+  },
+  "appDescription": {
+    "message": "A husky blocks distracting websites after you spend too long on them."
+  },
+  "usageLimitLabel": {
+    "message": "Minutes before the husky arrives"
+  },
+  "breakTimeLabel": {
+    "message": "Husky break time in minutes"
+  },
+  "huskyEnabledLabel": {
+    "message": "Enable Husky Gatekeeper"
+  },
+  "activeLabel": {
+    "message": "Active"
+  },
+  "activeStatus": {
+    "message": "Active - guarding your time"
+  },
+  "inactiveStatus": {
+    "message": "Inactive"
+  },
+  "limitShortLabel": {
+    "message": "Limit"
+  },
+  "breakShortLabel": {
+    "message": "Break"
+  },
+  "targetSitesLabel": {
+    "message": "Target sites"
+  },
+  "customDomainsHint": {
+    "message": "One domain per line. Subdomains are included automatically."
+  },
+  "dismissButton": {
+    "message": "Ask the husky to move"
+  },
+  "leaveButton": {
+    "message": "Ask the husky to leave"
+  },
+  "blockAllLabel": {
+    "message": "Block every site"
+  },
+  "blockAllHint": {
+    "message": "Strict mode - applies to all websites and tabs"
+  },
+  "statusChecking": {
+    "message": "Checking this tab..."
+  },
+  "statusTracked": {
+    "message": "Tracking this tab: $DOMAIN$",
+    "placeholders": {
+      "domain": {
+        "content": "$1"
+      }
+    }
+  },
+  "statusNotTracked": {
+    "message": "This tab is not in the watch list: $DOMAIN$",
+    "placeholders": {
+      "domain": {
+        "content": "$1"
+      }
+    }
+  },
+  "statusNotInjected": {
+    "message": "Not active on this tab yet. Reload the page after updating the extension."
+  },
+  "saveButton": {
+    "message": "Save"
+  },
+  "resetButton": {
+    "message": "Reset to defaults"
+  },
+  "savedMessage": {
+    "message": "Saved"
+  }
+}
