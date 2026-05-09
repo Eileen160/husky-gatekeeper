@@ -38,6 +38,9 @@
   "dismissButton": {
     "message": "Ask the husky to move"
   },
+  "overlayLabel": {
+    "message": "Husky on duty"
+  },
   "leaveButton": {
     "message": "Ask the husky to leave"
   },

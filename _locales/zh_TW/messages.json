@@ -38,6 +38,9 @@
   "dismissButton": {
     "message": "請哈士奇讓開"
   },
+  "overlayLabel": {
+    "message": "哈士奇執勤中"
+  },
   "leaveButton": {
     "message": "讓哈士奇離開"
   },

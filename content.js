@@ -13,6 +13,20 @@ const ENTER_VIDEO_MIN_SECONDS = 8;
 
 const preventScroll = (event) => event.preventDefault();
 
+function getUiMessage(messageName, fallbackText) {
+  const message = chrome.i18n.getMessage(messageName);
+  const uiLanguage = chrome.i18n.getUILanguage?.().toLowerCase() || '';
+
+  if (
+    uiLanguage.startsWith('zh') &&
+    (!message || message === 'Ask the husky to leave' || message === 'Husky on duty')
+  ) {
+    return fallbackText;
+  }
+
+  return message || fallbackText;
+}
+
 let huskyIsActive = false;
 let trackerRunning = false;
 let currentUsageLimit = 30;
@@ -617,20 +631,26 @@ function showHuskyUntil(breakEndsAt, onBreakEnd) {
 
   const countdown = document.createElement('div');
   countdown.id = 'husky-gatekeeper-countdown';
-  countdown.innerHTML = `
-    <p class="husky-label">Husky on duty</p>
-    <p class="husky-time">0:00</p>
-  `;
+
+  const label = document.createElement('p');
+  label.className = 'husky-label';
+  label.textContent = getUiMessage('overlayLabel', '哈士奇執勤中');
+
+  const time = document.createElement('p');
+  time.className = 'husky-time';
+  time.textContent = '0:00';
+
+  countdown.appendChild(label);
+  countdown.appendChild(time);
 
   const { stage, fallbackScene } = createHuskyStage();
   const leaveButton = document.createElement('button');
   leaveButton.id = 'husky-gatekeeper-leave';
   leaveButton.type = 'button';
-  leaveButton.textContent = chrome.i18n.getMessage('leaveButton') || 'Ask the husky to leave';
+  leaveButton.textContent = getUiMessage('leaveButton', '讓哈士奇離開');
   leaveButton.addEventListener('click', () => {
     dismissOverlay();
   });
-  const time = countdown.querySelector('.husky-time');
   let countdownCancelled = false;
 
   stopCountdown = () => {
