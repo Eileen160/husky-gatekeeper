@@ -15,6 +15,10 @@ Husky Gatekeeper 是一個 Chrome 擴充功能。當你在指定網站停留太�
 - 可用「讓哈士奇離開」提前關閉休息畫面。
 - 安裝或更新後會嘗試套用到已開啟的分頁。
 
+### 隱私
+
+Husky Gatekeeper 不會蒐集、傳送、販售或分析任何瀏覽資料。外掛會使用分頁網址來判斷目前頁面是否需要被監看或鎖定，但所有設定與計時資料都只儲存在使用者本機的 Chrome storage。
+
 ### 手動安裝
 
 1. 下載或解壓縮這個專案資料夾。
@@ -45,6 +49,10 @@ Husky Gatekeeper is a Chrome extension that shows a full-screen husky break scre
 - Blocks page scrolling during the break.
 - Lets you dismiss the husky early with the "Let the husky leave" control.
 - Attempts to apply itself to already-open tabs after install or update.
+
+### Privacy
+
+Husky Gatekeeper does not collect, transmit, sell, or analyze browsing data. The extension uses tab URLs only to decide whether a page should be watched or blocked. All settings and timer data are stored locally in Chrome storage.
 
 ### Manual Installation
 
