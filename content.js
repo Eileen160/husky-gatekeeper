@@ -756,7 +756,7 @@ function dismissOverlay({ restartTracking = true, clearBreak = true, broadcast =
 
   if (clearBreak) {
     clearBreakEntry(dismissedUsageKey);
-    resetUsageSeconds(dismissedUsageKey);
+    resetBreakUsageSeconds(dismissedUsageKey);
     if (dismissedUsageKey === GLOBAL_USAGE_KEY && broadcast) {
       broadcastGlobalDismiss();
     } else if (broadcast) {
@@ -774,7 +774,7 @@ function dismissOverlay({ restartTracking = true, clearBreak = true, broadcast =
     document.removeEventListener('wheel', preventScroll);
     document.removeEventListener('touchmove', preventScroll);
     if (restartTracking && currentHuskyEnabled && dismissedUsageKey === currentUsageKey) {
-      startTracking(currentUsageLimit, currentBreakTime);
+      startTracking(currentUsageLimit, currentBreakTime, { resetUsage: true });
     }
   }, 500);
 }
