@@ -95,46 +95,28 @@ function getMonitoredDomains(settings) {
   return shared.normalizeDomainList(settings.customDomains);
 }
 
-function loadUsageSeconds(usageKey, callback) {
-  chrome.storage.local.get({ [getUsageStorageKey(usageKey)]: null }, (result) => {
-    const entry = result[getUsageStorageKey(usageKey)];
-    callback(Math.max(0, Number.parseInt(entry?.seconds, 10) || 0));
+function resetUsageForSchedule(usageKey, settings, callback = () => {}) {
+  const usageKeys = usageKey === MONITORED_USAGE_KEY
+    ? getMonitoredDomains(settings)
+    : [usageKey];
+  const updates = {};
+
+  usageKeys.forEach((key) => {
+    updates[getUsageStorageKey(key)] = {
+      seconds: 0,
+      updatedAt: Date.now()
+    };
   });
+
+  chrome.storage.local.set(updates, callback);
 }
 
-function loadScheduledUsageSeconds(usageKey, settings, callback) {
-  if (usageKey !== MONITORED_USAGE_KEY) {
-    loadUsageSeconds(usageKey, callback);
-    return;
-  }
-
-  const domains = getMonitoredDomains(settings);
-  if (!domains.length) {
-    callback(0);
-    return;
-  }
-
-  const defaults = {};
-  domains.forEach((domain) => {
-    defaults[getUsageStorageKey(domain)] = null;
-  });
-
-  chrome.storage.local.get(defaults, (result) => {
-    const seconds = domains.map((domain) => {
-      const entry = result[getUsageStorageKey(domain)];
-      return Math.max(0, Number.parseInt(entry?.seconds, 10) || 0);
-    });
-    callback(Math.max(0, ...seconds));
-  });
-}
-
-function rescheduleAfterWake(usageKey, settings) {
-  loadScheduledUsageSeconds(usageKey, settings, (usageSeconds) => {
-    const limitSeconds = settings.usageLimit * 60;
-    const remainingSeconds = Math.max(1, limitSeconds - usageSeconds);
-
-    chrome.alarms.create(getLimitAlarmName(usageKey), {
-      when: Date.now() + remainingSeconds * 1000
+function rescheduleFullLimitAfterWake(usageKey, settings) {
+  resetUsageForSchedule(usageKey, settings, () => {
+    chrome.alarms.clear(getLimitAlarmName(usageKey), () => {
+      chrome.alarms.create(getLimitAlarmName(usageKey), {
+        when: Date.now() + settings.usageLimit * 60 * 1000
+      });
     });
   });
 }
@@ -292,7 +274,8 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
     message.type !== 'BROADCAST_DOMAIN_BREAK' &&
     message.type !== 'BROADCAST_DISMISS' &&
     message.type !== 'BROADCAST_SETTINGS' &&
-    message.type !== 'ENSURE_CONTENT_SCRIPT'
+    message.type !== 'ENSURE_CONTENT_SCRIPT' &&
+    message.type !== 'RESET_AFTER_IDLE'
   ) {
     return;
   }
@@ -300,6 +283,20 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
   if (message.type === 'ENSURE_CONTENT_SCRIPT') {
     ensureContentScript(message.tabId, (ok) => {
       sendResponse({ ok });
+    });
+    return true;
+  }
+
+  if (message.type === 'RESET_AFTER_IDLE') {
+    chrome.storage.local.get(null, (storedSettings) => {
+      const settings = shared.normalizeSettings(storedSettings);
+      const scheduledUsageKey = settings.blockAll ? GLOBAL_USAGE_KEY : MONITORED_USAGE_KEY;
+
+      if (getScheduledUsageKeys(settings).includes(scheduledUsageKey)) {
+        rescheduleFullLimitAfterWake(scheduledUsageKey, settings);
+      }
+
+      sendResponse({ ok: true });
     });
     return true;
   }
@@ -331,7 +328,7 @@ chrome.alarms.onAlarm.addListener((alarm) => {
     if (!getScheduledUsageKeys(settings).includes(usageKey)) return;
 
     if (Date.now() - alarm.scheduledTime > SLEEP_WAKE_GRACE_MS) {
-      rescheduleAfterWake(usageKey, settings);
+      rescheduleFullLimitAfterWake(usageKey, settings);
       return;
     }
 

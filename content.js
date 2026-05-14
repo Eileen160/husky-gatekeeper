@@ -153,6 +153,12 @@ function broadcastDomainDismiss(usageKey) {
   });
 }
 
+function resetScheduleAfterIdle() {
+  safeRuntimeSendMessage({
+    type: 'RESET_AFTER_IDLE'
+  });
+}
+
 function saveMonitoredBreakEntries(breakEndsAt) {
   const updates = {};
   shared.normalizeDomainList(currentCustomDomains).forEach((domain) => {
@@ -404,7 +410,9 @@ function startTracking(usageLimit, breakTime, { resetUsage = false } = {}) {
       lastTickAt = now;
 
       if (elapsedMs > MAX_TRACKED_TICK_GAP_MS) {
-        saveUsageSeconds(usageKey, localSeconds);
+        localSeconds = 0;
+        resetUsageSeconds(usageKey);
+        resetScheduleAfterIdle();
         secondsSinceSave = 0;
         return;
       }
