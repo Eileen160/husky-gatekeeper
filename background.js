@@ -1,10 +1,16 @@
 importScripts('shared.js');
 
 const shared = globalThis.HuskyGatekeeperShared;
+const USAGE_STORAGE_KEY = 'huskyGatekeeperUsage';
 const BREAK_STORAGE_KEY = 'huskyGatekeeperBreak';
 const GLOBAL_USAGE_KEY = '__all__';
 const MONITORED_USAGE_KEY = '__monitored__';
 const LIMIT_ALARM_PREFIX = 'husky-limit:';
+const SLEEP_WAKE_GRACE_MS = 15 * 1000;
+
+function getUsageStorageKey(usageKey) {
+  return `${USAGE_STORAGE_KEY}:${usageKey}`;
+}
 
 function getBreakStorageKey(usageKey) {
   return `${BREAK_STORAGE_KEY}:${usageKey}`;
@@ -87,6 +93,50 @@ function broadcastToTabs(message) {
 
 function getMonitoredDomains(settings) {
   return shared.normalizeDomainList(settings.customDomains);
+}
+
+function loadUsageSeconds(usageKey, callback) {
+  chrome.storage.local.get({ [getUsageStorageKey(usageKey)]: null }, (result) => {
+    const entry = result[getUsageStorageKey(usageKey)];
+    callback(Math.max(0, Number.parseInt(entry?.seconds, 10) || 0));
+  });
+}
+
+function loadScheduledUsageSeconds(usageKey, settings, callback) {
+  if (usageKey !== MONITORED_USAGE_KEY) {
+    loadUsageSeconds(usageKey, callback);
+    return;
+  }
+
+  const domains = getMonitoredDomains(settings);
+  if (!domains.length) {
+    callback(0);
+    return;
+  }
+
+  const defaults = {};
+  domains.forEach((domain) => {
+    defaults[getUsageStorageKey(domain)] = null;
+  });
+
+  chrome.storage.local.get(defaults, (result) => {
+    const seconds = domains.map((domain) => {
+      const entry = result[getUsageStorageKey(domain)];
+      return Math.max(0, Number.parseInt(entry?.seconds, 10) || 0);
+    });
+    callback(Math.max(0, ...seconds));
+  });
+}
+
+function rescheduleAfterWake(usageKey, settings) {
+  loadScheduledUsageSeconds(usageKey, settings, (usageSeconds) => {
+    const limitSeconds = settings.usageLimit * 60;
+    const remainingSeconds = Math.max(1, limitSeconds - usageSeconds);
+
+    chrome.alarms.create(getLimitAlarmName(usageKey), {
+      when: Date.now() + remainingSeconds * 1000
+    });
+  });
 }
 
 function createBreak(usageKey, breakTime, settings) {
@@ -279,6 +329,11 @@ chrome.alarms.onAlarm.addListener((alarm) => {
   chrome.storage.local.get(null, (storedSettings) => {
     const settings = shared.normalizeSettings(storedSettings);
     if (!getScheduledUsageKeys(settings).includes(usageKey)) return;
+
+    if (Date.now() - alarm.scheduledTime > SLEEP_WAKE_GRACE_MS) {
+      rescheduleAfterWake(usageKey, settings);
+      return;
+    }
 
     createBreak(usageKey, settings.breakTime, settings);
   });

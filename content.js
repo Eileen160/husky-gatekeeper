@@ -10,6 +10,7 @@ const GLOBAL_USAGE_KEY = '__all__';
 const USAGE_STALE_AFTER_MS = 30 * 60 * 1000;
 const USAGE_SAVE_INTERVAL_SECONDS = 5;
 const ENTER_VIDEO_MIN_SECONDS = 8;
+const MAX_TRACKED_TICK_GAP_MS = 10 * 1000;
 
 const preventScroll = (event) => event.preventDefault();
 
@@ -399,8 +400,16 @@ function startTracking(usageLimit, breakTime, { resetUsage = false } = {}) {
         return;
       }
 
-      const elapsedSeconds = Math.max(1, Math.floor((now - lastTickAt) / 1000));
+      const elapsedMs = now - lastTickAt;
       lastTickAt = now;
+
+      if (elapsedMs > MAX_TRACKED_TICK_GAP_MS) {
+        saveUsageSeconds(usageKey, localSeconds);
+        secondsSinceSave = 0;
+        return;
+      }
+
+      const elapsedSeconds = Math.max(1, Math.floor(elapsedMs / 1000));
       localSeconds += elapsedSeconds;
       secondsSinceSave += elapsedSeconds;
 
