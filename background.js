@@ -129,6 +129,10 @@ function createBreak(usageKey, breakTime, settings) {
   if (usageKey === MONITORED_USAGE_KEY) {
     const updates = {};
     getMonitoredDomains(settings).forEach((domain) => {
+      updates[getUsageStorageKey(domain)] = {
+        seconds: 0,
+        updatedAt: Date.now()
+      };
       updates[getBreakStorageKey(domain)] = {
         breakEndsAt,
         updatedAt: Date.now()
@@ -142,6 +146,10 @@ function createBreak(usageKey, breakTime, settings) {
   }
 
   chrome.storage.local.set({
+    [getUsageStorageKey(usageKey)]: {
+      seconds: 0,
+      updatedAt: Date.now()
+    },
     [getBreakStorageKey(usageKey)]: {
       breakEndsAt,
       updatedAt: Date.now()

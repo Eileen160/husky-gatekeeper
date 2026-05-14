@@ -236,6 +236,29 @@ function resetUsageSeconds(usageKey) {
   saveUsageSeconds(usageKey, 0);
 }
 
+function resetMonitoredUsageSeconds() {
+  const updates = {};
+  shared.normalizeDomainList(currentCustomDomains).forEach((domain) => {
+    updates[getUsageStorageKey(domain)] = {
+      seconds: 0,
+      updatedAt: Date.now()
+    };
+  });
+
+  if (Object.keys(updates).length) {
+    safeStorageSet(updates);
+  }
+}
+
+function resetBreakUsageSeconds(usageKey) {
+  if (usageKey === GLOBAL_USAGE_KEY) {
+    resetUsageSeconds(usageKey);
+    return;
+  }
+
+  resetMonitoredUsageSeconds();
+}
+
 function loadBreakEntry(usageKey, callback) {
   safeStorageGet({ [getBreakStorageKey(usageKey)]: null }, (result) => {
     const entry = result[getBreakStorageKey(usageKey)];
@@ -326,10 +349,10 @@ function activateBreak(usageKey, breakEndsAt, { broadcast = true } = {}) {
     return;
   }
 
-  stopTracker();
+  stopTracker({ persistUsage: false });
   huskyIsActive = true;
   activeBreakEndsAt = breakEndsAt;
-  resetUsageSeconds(usageKey);
+  resetBreakUsageSeconds(usageKey);
   saveBreakEntry(usageKey, breakEndsAt);
   if (usageKey === GLOBAL_USAGE_KEY && broadcast) {
     broadcastGlobalBreak(breakEndsAt);
@@ -342,7 +365,7 @@ function activateBreak(usageKey, breakEndsAt, { broadcast = true } = {}) {
     activeBreakEndsAt = 0;
     clearBreakEntry(usageKey);
     if (currentHuskyEnabled && usageKey === currentUsageKey) {
-      startTracking(currentUsageLimit, currentBreakTime);
+      startTracking(currentUsageLimit, currentBreakTime, { resetUsage: true });
     }
   });
 }
@@ -437,9 +460,9 @@ function startTracking(usageLimit, breakTime, { resetUsage = false } = {}) {
       }
     }, 1000);
 
-    stopTracker = () => {
+    stopTracker = ({ persistUsage = true } = {}) => {
       trackerRunning = false;
-      if (shouldPersistUsage) {
+      if (persistUsage && shouldPersistUsage) {
         saveUsageSeconds(usageKey, localSeconds);
       }
       clearInterval(tracker);
