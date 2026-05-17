@@ -10,7 +10,7 @@ const GLOBAL_USAGE_KEY = '__all__';
 const USAGE_STALE_AFTER_MS = 30 * 60 * 1000;
 const USAGE_SAVE_INTERVAL_SECONDS = 5;
 const ENTER_VIDEO_MIN_SECONDS = 8;
-const MAX_TRACKED_TICK_GAP_MS = 10 * 1000;
+const MAX_TRACKED_TICK_GAP_MS = 5 * 60 * 1000;
 
 const preventScroll = (event) => event.preventDefault();
 

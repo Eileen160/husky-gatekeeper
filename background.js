@@ -6,7 +6,7 @@ const BREAK_STORAGE_KEY = 'huskyGatekeeperBreak';
 const GLOBAL_USAGE_KEY = '__all__';
 const MONITORED_USAGE_KEY = '__monitored__';
 const LIMIT_ALARM_PREFIX = 'husky-limit:';
-const SLEEP_WAKE_GRACE_MS = 2 * 60 * 1000;
+const SLEEP_WAKE_GRACE_MS = 5 * 60 * 1000;
 
 function getUsageStorageKey(usageKey) {
   return `${USAGE_STORAGE_KEY}:${usageKey}`;
