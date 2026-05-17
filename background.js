@@ -198,6 +198,24 @@ function scheduleLimitAlarms(settings) {
   });
 }
 
+function ensureLimitAlarms(settings) {
+  const scheduledUsageKeys = getScheduledUsageKeys(settings);
+  if (!scheduledUsageKeys.length) return;
+
+  chrome.alarms.getAll((alarms) => {
+    const existingNames = new Set(alarms.map((alarm) => alarm.name));
+
+    scheduledUsageKeys.forEach((usageKey) => {
+      const alarmName = getLimitAlarmName(usageKey);
+      if (existingNames.has(alarmName)) return;
+
+      chrome.alarms.create(alarmName, {
+        when: Date.now() + settings.usageLimit * 60 * 1000
+      });
+    });
+  });
+}
+
 function clearActiveBreaks(settings) {
   const updates = {};
   [GLOBAL_USAGE_KEY, ...shared.normalizeDomainList(settings.customDomains)].forEach((usageKey) => {
@@ -376,7 +394,7 @@ injectAllOpenTabs(() => {
   chrome.storage.local.get(null, (storedSettings) => {
     const settings = shared.normalizeSettings(storedSettings);
     if (settings.huskyEnabled) {
-      scheduleLimitAlarms(settings);
+      ensureLimitAlarms(settings);
     }
   });
 });
